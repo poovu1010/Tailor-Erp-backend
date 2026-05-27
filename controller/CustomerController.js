@@ -1,47 +1,39 @@
+const { CustomerModel } = require("../models/CustomerModel");
 
 
-// CREATE CUSTOMER
-exports.createCustomer = async(req,res)=>{
 
-   try{
-
+exports.createCustomer = async (req, res) => {
+   try {
+      console.log(req.body)
       const {
          customer_name,
          Phone,
          Addres
       } = req.body;
 
-      const customer = await CustomerModel.create({
-
+      const customer = new CustomerModel({
          customer_name,
-
          Phone,
-
          Addres,
-
-         shopId:req.user.shopId
-
+         shopId: req.user._id
       });
+
+      const data = await customer.save();
 
       res.status(201).json({
-
-         success:true,
-
-         message:"Customer Created",
-
-         data:customer
-
+         success: true,
+         message: "Customer Created",
+         data
       });
-
-   }catch(err){
+   } catch (err) {
 
       console.log(err);
 
       res.status(500).json({
 
-         success:false,
+         success: false,
 
-         message:"Server Error"
+         message: "Server Error"
 
       });
 
@@ -50,33 +42,33 @@ exports.createCustomer = async(req,res)=>{
 };
 
 // GET ALL CUSTOMERS
-exports.getAllCustomers = async(req,res)=>{
+exports.getAllCustomers = async (req, res) => {
 
-   try{
+   try {
 
       const customers = await CustomerModel.find({
 
-         shopId:req.user.shopId
+         shopId: req.user
 
       });
 
       res.status(200).json({
 
-         success:true,
+         success: true,
 
-         data:customers
+         data: customers
 
       });
 
-   }catch(err){
+   } catch (err) {
 
       console.log(err);
 
       res.status(500).json({
 
-         success:false,
+         success: false,
 
-         message:"Server Error"
+         message: "Server Error"
 
       });
 
@@ -85,21 +77,21 @@ exports.getAllCustomers = async(req,res)=>{
 };
 
 // GET SINGLE CUSTOMER
-exports.getSingleCustomer = async(req,res)=>{
+exports.getSingleCustomer = async (req, res) => {
 
-   try{
+   try {
 
       const customer = await CustomerModel.findById(
          req.params.id
       );
 
-      if(!customer){
+      if (!customer) {
 
          return res.status(404).json({
 
-            success:false,
+            success: false,
 
-            message:"Customer Not Found"
+            message: "Customer Not Found"
 
          });
 
@@ -107,21 +99,21 @@ exports.getSingleCustomer = async(req,res)=>{
 
       res.status(200).json({
 
-         success:true,
+         success: true,
 
-         data:customer
+         data: customer
 
       });
 
-   }catch(err){
+   } catch (err) {
 
       console.log(err);
 
       res.status(500).json({
 
-         success:false,
+         success: false,
 
-         message:"Server Error"
+         message: "Server Error"
 
       });
 
@@ -132,42 +124,42 @@ exports.getSingleCustomer = async(req,res)=>{
 
 
 //  UPDATE CUSTOMER
-exports.updateCustomer = async(req,res)=>{
+exports.updateCustomer = async (req, res) => {
 
-   try{
+   try {
 
       const updatedCustomer =
-      await CustomerModel.findByIdAndUpdate(
+         await CustomerModel.findByIdAndUpdate(
 
-         req.params.id,
+            req.params.id,
 
-         req.body,
+            req.body,
 
-         {
-            new:true
-         }
+            {
+               new: true
+            }
 
-      );
+         );
 
       res.status(200).json({
 
-         success:true,
+         success: true,
 
-         message:"Customer Updated",
+         message: "Customer Updated",
 
-         data:updatedCustomer
+         data: updatedCustomer
 
       });
 
-   }catch(err){
+   } catch (err) {
 
       console.log(err);
 
       res.status(500).json({
 
-         success:false,
+         success: false,
 
-         message:"Server Error"
+         message: "Server Error"
 
       });
 
@@ -177,8 +169,8 @@ exports.updateCustomer = async(req,res)=>{
 
 
 
-exports.deleteCustomer = async(req,res)=>{
-   try{
+exports.deleteCustomer = async (req, res) => {
+   try {
 
       await CustomerModel.findByIdAndDelete(
          req.params.id
@@ -186,21 +178,21 @@ exports.deleteCustomer = async(req,res)=>{
 
       res.status(200).json({
 
-         success:true,
+         success: true,
 
-         message:"Customer Deleted"
+         message: "Customer Deleted"
 
       });
 
-   }catch(err){
+   } catch (err) {
 
       console.log(err);
 
       res.status(500).json({
 
-         success:false,
+         success: false,
 
-         message:"Server Error"
+         message: "Server Error"
 
       });
 

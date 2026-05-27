@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 exports.verifiedUser = async(req,res,next)=>{
+
+    try {
     const token = req.cookies.jwt
+    const decode = jwt.verify(token,process.env.JWT_SECRET_KEY)
+    console.log(decode)
     if(!token){
         
       return res.status(401).json({
@@ -9,11 +13,19 @@ exports.verifiedUser = async(req,res,next)=>{
             status:false
         })
     }
-    
-    const decode = jwt.verify(token,process.env.JWT_SECRET_KEY)
-    res.send("verifyied")
-
-    req.user = decode.id;
+     req.user = decode.id;
+   
 
     next()
+        
+    } catch (error) {
+        console.log(error)
+        res.status(401).json(error.name)
+    }
+   
+    
+   
+    
+
+   
 }
