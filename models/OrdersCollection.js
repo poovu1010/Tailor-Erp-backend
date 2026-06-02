@@ -19,7 +19,7 @@ const OrdersSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ["stitching", "ready", "delivered"],
-      default: "waiting Queue",
+      default: "stitching",
     },
     price: {
       type: Number,

@@ -14,7 +14,6 @@ const CustomerSchema = mongoose.Schema(
     },
     Phone: {
       type: Number,
-      required: true,
       min: 10,
     },
     Addres: {

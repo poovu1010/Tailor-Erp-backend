@@ -4,7 +4,7 @@ const { CustomerModel } = require("../models/CustomerModel");
 
 exports.createCustomer = async (req, res) => {
    try {
-      console.log(req.body)
+      // console.log(req.body)
       const {
          customer_name,
          Phone,

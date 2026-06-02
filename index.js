@@ -9,7 +9,7 @@ const { config } = require("dotenv");
 const app = express();
 config()
 app.use(cors({
-   origin:["http://localhost:5173", "http://3.220.158.94:5173","https://tailor-erp-frontrnd.vercel.app"],
+   origin:["http://localhost:5173", "http://13.234.233.164:5173","https://tailor-erp-frontrnd.vercel.app"],
    credentials:true
 }))
 app.use(express.json());

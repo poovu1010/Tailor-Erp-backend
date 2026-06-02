@@ -5,8 +5,8 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const { json } = require("express");
 
-const createJwt = (id, email,role) => {
-  return jwt.sign({ id, email,role }, process.env.JWT_SECRET_KEY, {
+const createJwt = (id, email, role) => {
+  return jwt.sign({ id, email, role }, process.env.JWT_SECRET_KEY, {
     expiresIn: "1h",
   });
 };
@@ -28,9 +28,9 @@ exports.ownerSignupController = async (req, res) => {
     console.log(adminData._id);
 
 
-    const token = createJwt(adminData._id, adminData.email,adminData.role)
+    const token = createJwt(adminData._id, adminData.email, adminData.role)
 
-    res.cookie("jwt", token, { maxAge: 1000 * 60 * 60, httpOnly: true,secure:false })
+    res.cookie("jwt", token, { maxAge: 1000 * 60 * 60, httpOnly: true, secure: false })
 
     res.status(201).json({
       success: true,
@@ -63,7 +63,7 @@ exports.ownerSignupController = async (req, res) => {
 exports.ownerLoginController = async (req, res) => {
 
   try {
-   
+
     const { email, password } = req.body;
     // if new User
     const isEmailexists = await AdminModel.findOne({ email });
@@ -90,17 +90,22 @@ exports.ownerLoginController = async (req, res) => {
         message: "Email or Password Something went Wrong",
       });
     }
-    
-    const token = createJwt(isEmailexists._id, isEmailexists.email,isEmailexists.role);
+
+    const token = createJwt(isEmailexists._id, isEmailexists.email, isEmailexists.role);
     const decode_token = jwt.verify(token, process.env.JWT_SECRET_KEY)
     console.log(decode_token)
     res.status(200)
       .cookie("jwt", token, { maxAge: 1000 * 60 * 60 })
-      .json({ message: "logined Succesfully",decode_token, success: true });
+      .json({ message: "logined Succesfully", decode_token, success: true });
   } catch (error) {
     res.status(200).json(error);
   }
 };
+
+
+
+
+
 
 exports.OwnerLogoutController = async (req, res) => {
   try {
@@ -110,3 +115,20 @@ exports.OwnerLogoutController = async (req, res) => {
     console.log(error);
   }
 };
+
+
+
+
+// exports.OwnerProfileImgUploade = async(req,res)=>{
+//   try {
+    
+//   } catch (error) {
+    
+//   }
+// }
+
+
+
+
+
+
