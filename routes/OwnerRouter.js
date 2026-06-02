@@ -29,7 +29,7 @@ ownerRouter.post("/uploade_profile",verifiedUser,)
 ownerRouter.post("/newOrder",verifiedUser,CreateOrder)
 ownerRouter.get("/get-all-order",verifiedUser,GetAllorders)
 
-ownerRouter.get("/Verify",verifiedUser,(req,res)=>{
+ownerRouter.post("/Verify",verifiedUser,(req,res)=>{
   res.status(200).json({
     message:"authorized",
     status:true

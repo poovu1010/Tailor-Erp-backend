@@ -6,6 +6,7 @@ exports.verifiedUser = async(req,res,next)=>{
         console.log("hi")
     const token = req.cookies.jwt
     const decode = jwt.verify(token,process.env.JWT_SECRET_KEY)
+    console.log("protected route")
     console.log(decode)
     if(!token){
         
@@ -23,8 +24,6 @@ exports.verifiedUser = async(req,res,next)=>{
         console.log(error)
         res.status(401).json(error.name)
     }
-   
-    
    
     
 
