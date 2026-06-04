@@ -5,6 +5,7 @@ const { ownerRouter } = require("./routes/OwnerRouter");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const { config } = require("dotenv");
+const { globalErrorHandler } = require("./middleware/GlobalErrorHandler");
 
 const app = express();
 config()
@@ -30,3 +31,4 @@ const startServer = async () => {
 startServer();
 
 app.use("/Owner", ownerRouter);
+app.use(globalErrorHandler)

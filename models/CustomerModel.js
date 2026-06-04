@@ -10,11 +10,15 @@ const CustomerSchema = mongoose.Schema(
       required: true,
       type: String,
       maxLength: 30,
-      minLength: 5,
+      minLength: 4,
     },
     Phone: {
       type: Number,
       min: 10,
+    },
+    TotalOrders:{
+      type:Number,
+      default:0
     },
     Addres: {
       type: String,

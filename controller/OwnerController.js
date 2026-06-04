@@ -11,7 +11,7 @@ const createJwt = (id, email, role) => {
   });
 };
 
-exports.ownerSignupController = async (req, res) => {
+exports.ownerSignupController = async (req, res,next) => {
   try {
     console.log(req.body);
     const { userName, email, password, role } = req.body;
@@ -39,28 +39,11 @@ exports.ownerSignupController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    if (error.code == 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "Email Already Exists",
-      });
-    }
-
-    if (error.name == "ValidationError") {
-      return res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
-
-    res.status(400).json({
-      success: false,
-      message: error.message,
-    });
+   next(error)
   }
 };
 
-exports.ownerLoginController = async (req, res) => {
+exports.ownerLoginController = async (req, res,next) => {
 
   try {
 
@@ -98,7 +81,7 @@ exports.ownerLoginController = async (req, res) => {
       .cookie("jwt", token, { maxAge: 1000 * 60 * 60 })
       .json({ message: "logined Succesfully", decode_token, success: true });
   } catch (error) {
-    res.status(200).json(error);
+    next(error)
   }
 };
 
@@ -113,19 +96,13 @@ exports.OwnerLogoutController = async (req, res) => {
     res.clearCookie("jwt").json("sucess");
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 
 
 
 
-// exports.OwnerProfileImgUploade = async(req,res)=>{
-//   try {
-    
-//   } catch (error) {
-    
-//   }
-// }
 
 
 

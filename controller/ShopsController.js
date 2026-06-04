@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-exports.shopCreateControlller = async (req, res) => {
+exports.shopCreateControlller = async (req, res,next) => {
   try {
 
     const { shopName,phoneNumber, Address, pincode } = req.body;
@@ -21,5 +21,6 @@ exports.shopCreateControlller = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    next(err)
   }
 };

@@ -1,21 +1,37 @@
+const {  mongoose } = require("mongoose");
 const { CustomerModel } = require("../models/CustomerModel");
 
 
 
-exports.createCustomer = async (req, res) => {
+exports.createCustomer = async (req, res,next) => {
    try {
-      // console.log(req.body)
+      
       const {
          customer_name,
          Phone,
          Addres
       } = req.body;
 
+
+      // unique cr duplicte customer
+
+      const isCustomerExists = await CustomerModel.findOne({
+         shopId:req.user,
+         Phone
+      }) 
+
+      if(isCustomerExists){
+         return res.status(400).json({
+            status:false,
+            message:"Customer already exists or change Number"
+         })
+      }
+
       const customer = new CustomerModel({
          customer_name,
          Phone,
          Addres,
-         shopId: req.user._id
+         shopId: req.user
       });
 
       const data = await customer.save();
@@ -27,57 +43,65 @@ exports.createCustomer = async (req, res) => {
       });
    } catch (err) {
 
-      console.log(err);
-
-      res.status(500).json({
-
-         success: false,
-
-         message: "Server Error"
-
-      });
-
+   next(err)
    }
 
 };
 
 // GET ALL CUSTOMERS
-exports.getAllCustomers = async (req, res) => {
+exports.getAllCustomers = async (req, res,next) => {
 
    try {
 
-      const customers = await CustomerModel.find({
+      const shopId = req.user
+      
 
-         shopId: req.user
-
-      });
-
+      const getCustomersWithOrders = await CustomerModel.aggregate([{
+         $match : {
+            shopId: new mongoose.Types.ObjectId(shopId)
+         }
+      },
+      {
+         $lookup:{
+            from:"orders",
+            localField:"_id",
+            foreignField:"customerId",
+            as:"orders"
+         }
+      },
+      {
+         $addFields:{
+            totalOrder:{$size:"$orders"}
+         }
+      },
+      {
+         $project:{
+            orders:0
+         }
+      }
+      ])
+     
+     
+      console.log(getCustomersWithOrders)
       res.status(200).json({
 
          success: true,
+         data:getCustomersWithOrders
 
-         data: customers
+         
 
       });
 
    } catch (err) {
 
-      console.log(err);
-
-      res.status(500).json({
-
-         success: false,
-
-         message: "Server Error"
-
-      });
+      next(err)
 
    }
 
 };
 
 // GET SINGLE CUSTOMER
-exports.getSingleCustomer = async (req, res) => {
+exports.getSingleCustomer = async (req, res,next) => {
 
    try {
 
@@ -106,17 +130,7 @@ exports.getSingleCustomer = async (req, res) => {
       });
 
    } catch (err) {
-
-      console.log(err);
-
-      res.status(500).json({
-
-         success: false,
-
-         message: "Server Error"
-
-      });
-
+next(err)
    }
 
 };
@@ -124,7 +138,7 @@ exports.getSingleCustomer = async (req, res) => {
 
 
 //  UPDATE CUSTOMER
-exports.updateCustomer = async (req, res) => {
+exports.updateCustomer = async (req, res,next) => {
 
    try {
 
@@ -154,14 +168,7 @@ exports.updateCustomer = async (req, res) => {
    } catch (err) {
 
       console.log(err);
-
-      res.status(500).json({
-
-         success: false,
-
-         message: "Server Error"
-
-      });
+next(err)
 
    }
 
@@ -169,7 +176,7 @@ exports.updateCustomer = async (req, res) => {
 
 
 
-exports.deleteCustomer = async (req, res) => {
+exports.deleteCustomer = async (req, res,next) => {
    try {
 
       await CustomerModel.findByIdAndDelete(
@@ -188,13 +195,9 @@ exports.deleteCustomer = async (req, res) => {
 
       console.log(err);
 
-      res.status(500).json({
+     next(err)
 
-         success: false,
-
-         message: "Server Error"
-
-      });
+  
 
    }
 

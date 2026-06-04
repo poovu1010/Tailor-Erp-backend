@@ -17,7 +17,7 @@ ownerRouter.post("/logout", OwnerLogoutController);
 
 
 ownerRouter.post("/newCustomer",verifiedUser,createCustomer)
-ownerRouter.get("/get-all-user",verifiedUser,getAllCustomers)
+ownerRouter.get("/get-all-customer",verifiedUser,getAllCustomers)
 ownerRouter.get("/get-single-customer/:id",verifiedUser,getSingleCustomer)
 ownerRouter.put("/updateCustomer/:id",verifiedUser,updateCustomer)
 ownerRouter.delete("/deleteCustomer/:id",verifiedUser,deleteCustomer)

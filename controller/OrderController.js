@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { ordersModel } = require("../models/OrdersCollection");
 
-exports.CreateOrder = async (req, res) => {
+exports.CreateOrder = async (req, res,next) => {
     try{
 
     const {
@@ -9,17 +9,21 @@ exports.CreateOrder = async (req, res) => {
         clothType,
         price,
         advancePaid,
-        expectedDeliveryDate
+        expectedDeliveryDate,
+        status,
+        notes
     } = req.body
     const userId = req.user
-    console.log(userId)
+   
      const orderDetail = new ordersModel({
-        shopId:userId,
-      customerId,
+      shopId:userId,
+       customerId,
         clothType,
         price,
         advancePaid,
-        expectedDeliveryDate
+        status,
+        expectedDeliveryDate,
+        notes
     });
     await orderDetail.save();
 
@@ -30,10 +34,11 @@ exports.CreateOrder = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    next(err)
   }
 }
 
-exports.GetAllorders = async (req,res) => {
+exports.GetAllorders = async (req,res,next) => {
     try {
         
         const allorders =await ordersModel.find({
@@ -45,6 +50,6 @@ exports.GetAllorders = async (req,res) => {
             allorders
         })
     } catch (error) {
-        res.json(error)
+       next(err)
     }
 }

@@ -18,16 +18,20 @@ const OrdersSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["stitching", "ready", "delivered"],
-      default: "stitching",
+      enum: ["Queue","stitching", "ready", "delivered"],
+      default: "Queue",
     },
     price: {
       type: Number,
+      
       required: true,
     },
     advancePaid: {
       type: Number,
       required: true,
+    },
+    notes:{
+      type:String
     },
     expectedDeliveryDate: {
       type: Date,
