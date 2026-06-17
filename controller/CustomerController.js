@@ -1,14 +1,15 @@
-const {  mongoose } = require("mongoose");
+const { mongoose } = require("mongoose");
 const { CustomerModel } = require("../models/CustomerModel");
 
 
 
-exports.createCustomer = async (req, res,next) => {
+exports.createCustomer = async (req, res, next) => {
    try {
-      
+
       const {
          customer_name,
          Phone,
+         Email,
          Addres
       } = req.body;
 
@@ -16,14 +17,14 @@ exports.createCustomer = async (req, res,next) => {
       // unique cr duplicte customer
 
       const isCustomerExists = await CustomerModel.findOne({
-         shopId:req.user,
+         shopId: req.user,
          Phone
-      }) 
+      })
 
-      if(isCustomerExists){
+      if (isCustomerExists) {
          return res.status(400).json({
-            status:false,
-            message:"Customer already exists or change Number"
+            status: false,
+            message: "Customer already exists or change Number"
          })
       }
 
@@ -43,52 +44,52 @@ exports.createCustomer = async (req, res,next) => {
       });
    } catch (err) {
 
-   next(err)
+      next(err)
    }
 
 };
 
 // GET ALL CUSTOMERS
-exports.getAllCustomers = async (req, res,next) => {
+exports.getAllCustomers = async (req, res, next) => {
 
    try {
 
       const shopId = req.user
-      
+
 
       const getCustomersWithOrders = await CustomerModel.aggregate([{
-         $match : {
+         $match: {
             shopId: new mongoose.Types.ObjectId(shopId)
          }
       },
       {
-         $lookup:{
-            from:"orders",
-            localField:"_id",
-            foreignField:"customerId",
-            as:"orders"
+         $lookup: {
+            from: "orders",
+            localField: "_id",
+            foreignField: "customerId",
+            as: "orders"
          }
       },
       {
-         $addFields:{
-            totalOrder:{$size:"$orders"}
+         $addFields: {
+            totalOrder: { $size: "$orders" }
          }
       },
       {
-         $project:{
-            orders:0
+         $project: {
+            orders: 0
          }
       }
       ])
-     
-     
+
+
       console.log(getCustomersWithOrders)
       res.status(200).json({
 
          success: true,
-         data:getCustomersWithOrders
+         data: getCustomersWithOrders
 
-         
+
 
       });
 
@@ -101,36 +102,43 @@ exports.getAllCustomers = async (req, res,next) => {
 };
 
 // GET SINGLE CUSTOMER
-exports.getSingleCustomer = async (req, res,next) => {
+exports.getSingleCustomer = async (req, res, next) => {
 
    try {
+      const userId = req.user
+      // console.log(userId)
 
-      const customer = await CustomerModel.findById(
-         req.params.id
-      );
+      const { id } = req.params
+      const getAllDetail = await CustomerModel.aggregate([{
+         $match: {
+            _id: new mongoose.Types.ObjectId(id),
+            shopId: new mongoose.Types.ObjectId(req.user)
+         }
 
-      if (!customer) {
-
-         return res.status(404).json({
-
-            success: false,
-
-            message: "Customer Not Found"
-
-         });
-
+      },
+      {
+         $lookup: {
+            from: "orders",
+            localField: "_id",
+            foreignField:"customerId",
+            as:"OrdersData"
+         }
+      },{
+         $addFields:{
+            totalOrder:{$size:"$OrdersData"},
+            totalAmount:{$sum:"$OrdersData.price"}
+         },
       }
-
+      
+      ])
       res.status(200).json({
-
-         success: true,
-
-         data: customer
-
-      });
+         status:"success",
+         message:"successfully fetched",
+         data:getAllDetail
+      })
 
    } catch (err) {
-next(err)
+      next(err)
    }
 
 };
@@ -138,7 +146,7 @@ next(err)
 
 
 //  UPDATE CUSTOMER
-exports.updateCustomer = async (req, res,next) => {
+exports.updateCustomer = async (req, res, next) => {
 
    try {
 
@@ -168,7 +176,7 @@ exports.updateCustomer = async (req, res,next) => {
    } catch (err) {
 
       console.log(err);
-next(err)
+      next(err)
 
    }
 
@@ -176,7 +184,7 @@ next(err)
 
 
 
-exports.deleteCustomer = async (req, res,next) => {
+exports.deleteCustomer = async (req, res, next) => {
    try {
 
       await CustomerModel.findByIdAndDelete(
@@ -195,9 +203,9 @@ exports.deleteCustomer = async (req, res,next) => {
 
       console.log(err);
 
-     next(err)
+      next(err)
 
-  
+
 
    }
 

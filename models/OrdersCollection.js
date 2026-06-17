@@ -18,7 +18,7 @@ const OrdersSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Queue","stitching", "ready", "delivered"],
+      enum: ["Queue","Stitching","Processing", "Ready", "Delivered"],
       default: "Queue",
     },
     price: {
@@ -29,6 +29,21 @@ const OrdersSchema = mongoose.Schema(
     advancePaid: {
       type: Number,
       required: true,
+    },
+    receivedAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    balanceAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ["paid", "partial", "due"],
+      default: "due",
     },
     notes:{
       type:String

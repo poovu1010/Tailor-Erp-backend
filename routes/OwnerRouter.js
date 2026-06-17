@@ -7,7 +7,7 @@ const {
 const { verifiedUser } = require("../middleware/authentication");
 const { createCustomer, getAllCustomers, getSingleCustomer, updateCustomer, deleteCustomer } = require("../controller/CustomerController");
 const { verify } = require("jsonwebtoken");
-const { CreateOrder, GetAllorders } = require("../controller/OrderController");
+const { CreateOrder, GetAllorders, UpdateOrderStatus, GetSingleOrder } = require("../controller/OrderController");
 
 const ownerRouter = express.Router();
 
@@ -18,16 +18,16 @@ ownerRouter.post("/logout", OwnerLogoutController);
 
 ownerRouter.post("/newCustomer",verifiedUser,createCustomer)
 ownerRouter.get("/get-all-customer",verifiedUser,getAllCustomers)
-ownerRouter.get("/get-single-customer/:id",verifiedUser,getSingleCustomer)
+ownerRouter.get("/get-single-customer-allInfo/:id",verifiedUser,getSingleCustomer)
 ownerRouter.put("/updateCustomer/:id",verifiedUser,updateCustomer)
 ownerRouter.delete("/deleteCustomer/:id",verifiedUser,deleteCustomer)
 
 
 ownerRouter.post("/uploade_profile",verifiedUser,)
-
-
 ownerRouter.post("/newOrder",verifiedUser,CreateOrder)
 ownerRouter.get("/get-all-order",verifiedUser,GetAllorders)
+ownerRouter.get("/getSingle-order/:Orderid",verifiedUser,GetSingleOrder)
+ownerRouter.patch("/update-status/:Orderid",UpdateOrderStatus)
 
 ownerRouter.post("/Verify",verifiedUser,(req,res)=>{
   res.status(200).json({

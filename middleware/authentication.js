@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 exports.verifiedUser = async(req,res,next)=>{
 
     try {
-        console.log("hi")
+        
     const token = req.cookies.jwt
     const decode = jwt.verify(token,process.env.JWT_SECRET_KEY)
     console.log("protected route")
