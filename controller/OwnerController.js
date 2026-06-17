@@ -30,7 +30,16 @@ exports.ownerSignupController = async (req, res,next) => {
 
     const token = createJwt(adminData._id, adminData.email, adminData.role)
 
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60, secure: false })
+    res
+  .status(200)
+  .cookie("jwt", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60,
+    path: "/",
+  })
+  
 
     res.status(201).json({
       success: true,
@@ -77,9 +86,20 @@ exports.ownerLoginController = async (req, res,next) => {
     const token = createJwt(isEmailexists._id, isEmailexists.email, isEmailexists.role);
     const decode_token = jwt.verify(token, process.env.JWT_SECRET_KEY)
     console.log(decode_token)
-    res.status(200)
-      .cookie("jwt", token, { maxAge: 1000 * 60 * 60 })
-      .json({ message: "logined Succesfully", decode_token, success: true });
+   res
+  .status(200)
+  .cookie("jwt", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000 * 60 * 60,
+    path: "/",
+  })
+  .json({
+    message: "Login successfully",
+    decode_token,
+    success: true,
+  });
   } catch (error) {
     next(error)
   }
