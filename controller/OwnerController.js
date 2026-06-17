@@ -30,7 +30,7 @@ exports.ownerSignupController = async (req, res,next) => {
 
     const token = createJwt(adminData._id, adminData.email, adminData.role)
 
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60, httpOnly: true, secure: false })
+    res.cookie("jwt", token, { httpOnly: true, maxAge: 1000 * 60 * 60, secure: false })
 
     res.status(201).json({
       success: true,
