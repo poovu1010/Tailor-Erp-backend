@@ -110,18 +110,26 @@ exports.ownerLoginController = async (req, res,next) => {
 
 
 
-exports.OwnerLogoutController = async (req, res) => {
+  exports.OwnerLogoutController = async (req, res, next) => {
   try {
-    // res.status(200).cookie("jwt","",{maxAge:1000*1}).json("logout Succes")
-    res.clearCookie("jwt").json({
-      sucess:true,
-      message:"Logout Succes"
-    });
+    return res
+      .status(200)
+      .clearCookie("jwt", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .json({
+        success: true,
+        message: "Logout success",
+      });
   } catch (error) {
     console.log(error);
-    next(error)
+    next(error);
   }
 };
+
+
 
 
 
