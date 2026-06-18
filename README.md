@@ -119,13 +119,13 @@ NODE_ENV=production
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/stitch-flow-backend.git
+git clone https://github.com/poovu1010/Tailor-Erp-backend.git
 ```
 
 Move into the backend folder:
 
 ```bash
-cd stitch-flow-backend
+cd Tailor-Erp-backend
 ```
 
 Install dependencies:
@@ -216,8 +216,8 @@ Example cookie setup:
 ```js
 res.cookie("jwt", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  secure: "true,
+  
   maxAge: 1000 * 60 * 60 * 24,
 });
 ```
@@ -408,13 +408,13 @@ For production deployment, make sure:
 Frontend repository:
 
 ```txt
-https://github.com/your-username/stitch-flow-frontend
+https://github.com/poovu1010/CRM-APP-FRONTEND.git
 ```
 
 Backend repository:
 
 ```txt
-https://github.com/your-username/stitch-flow-backend
+ https://github.com/poovu1010/Tailor-Erp-backend
 ```
 
 ---
