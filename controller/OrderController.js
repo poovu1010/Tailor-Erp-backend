@@ -97,6 +97,11 @@ exports.GetAllorders = async (req, res, next) => {
                 $sum: {
                   $cond: [{ $eq: ["$status", "Delivered"] }, 1, 0]
                 }
+              },
+              TotalProcessing:{
+                $sum:{
+                  $cond: [{$eq:["$status","Processing"]},1,0]
+                }
               }
             }
           }
