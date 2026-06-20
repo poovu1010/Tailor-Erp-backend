@@ -108,9 +108,11 @@ exports.ownerLoginController = async (req, res, next) => {
       OwnerId: isEmailexists._id
     })
     // send otp to mail
-    await sendMailer(email,"",GenerateOtp);
+    
 
-    await OtpData.save()
+   const saved = await OtpData.save()
+   console.log(saved)
+    await sendMailer(email,"otp-verification",GenerateOtp);
   
     res.status(200).json({
       message:`otp sent to ${email}`,
