@@ -16,6 +16,10 @@ const CustomerSchema = mongoose.Schema(
       type: Number,
       min: 10,
     },
+    Gmail:{
+        type:String,
+        required:true
+    },
     TotalOrders:{
       type:Number,
       default:0

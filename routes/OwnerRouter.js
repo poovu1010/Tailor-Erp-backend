@@ -3,6 +3,7 @@ const {
   ownerSignupController,
   ownerLoginController,
   OwnerLogoutController,
+  VerifyOtp,
 } = require("../controller/OwnerController");
 const { verifiedUser } = require("../middleware/authentication");
 const { createCustomer, getAllCustomers, getSingleCustomer, updateCustomer, deleteCustomer } = require("../controller/CustomerController");
@@ -13,6 +14,7 @@ const ownerRouter = express.Router();
 
 ownerRouter.post("/Signup", ownerSignupController);
 ownerRouter.post("/login", ownerLoginController);
+ownerRouter.post("/Verify-otp",VerifyOtp)
 ownerRouter.post("/logout", OwnerLogoutController);
 
 

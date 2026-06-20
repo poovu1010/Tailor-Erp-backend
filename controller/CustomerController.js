@@ -32,6 +32,7 @@ exports.createCustomer = async (req, res, next) => {
          customer_name,
          Phone,
          Addres,
+         Gmail:Email,
          shopId: req.user
       });
 
