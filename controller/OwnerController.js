@@ -98,7 +98,7 @@ exports.ownerLoginController = async (req, res, next) => {
     const GenerateOtp = Math.floor(100000 + Math.random() * 900000);
     console.log(GenerateOtp)
     // set Expity
-    const expiryTime = Date.now() + 1000 * 60 + 5;
+    const expiryTime = Date.now() + 1000 * 60 * 5;
 
     // put in Collection
     const OtpData = OtpModel({
@@ -108,7 +108,7 @@ exports.ownerLoginController = async (req, res, next) => {
       OwnerId: isEmailexists._id
     })
     // send otp to mail
-    sendMailer(email,"",GenerateOtp);
+    await sendMailer(email,"",GenerateOtp);
 
     await OtpData.save()
   
@@ -170,7 +170,7 @@ exports.VerifyOtp = async (req, res, next) => {
     })
   }
 
-  return res.status(400).res({
+  return res.status(400).json({
       message:"Invalid OTp",
       success:false
   })
