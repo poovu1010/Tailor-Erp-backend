@@ -1,7 +1,7 @@
 const { ConnectDB } = require("./config/Database");
 const express = require("express");
 
-const { ownerRouter } = require("./routes/OwnerRouter");
+const { ownerRouter, OrderCheck } = require("./routes/OwnerRouter");
 const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const { config } = require("dotenv");
@@ -15,6 +15,10 @@ app.use(cors({
 }))
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/Owner", ownerRouter);
+app.use("/Order-check",OrderCheck)
+app.use(globalErrorHandler)
 
 const startServer = async () => {
   try {
@@ -30,5 +34,4 @@ const startServer = async () => {
 
 startServer();
 
-app.use("/Owner", ownerRouter);
-app.use(globalErrorHandler)
+

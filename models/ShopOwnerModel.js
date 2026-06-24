@@ -24,7 +24,7 @@ const AdminSchema = mongoose.Schema({
   role: {
     type: String,
     enum: {
-      values: ["Owner", "Staff", "Tailor"],
+      values: ["Owner","Customer"],
       message: "{value} is not a valid role",
     },
     default: "Owner",

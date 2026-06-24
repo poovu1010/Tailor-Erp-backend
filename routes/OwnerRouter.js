@@ -9,8 +9,14 @@ const { verifiedUser } = require("../middleware/authentication");
 const { createCustomer, getAllCustomers, getSingleCustomer, updateCustomer, deleteCustomer } = require("../controller/CustomerController");
 const { verify } = require("jsonwebtoken");
 const { CreateOrder, GetAllorders, UpdateOrderStatus, GetSingleOrder } = require("../controller/OrderController");
+const { LoginController, VerifyOtpController } = require("../controller/Orderchkeck/Login");
 
 const ownerRouter = express.Router();
+const OrderCheck = express.Router();
+
+OrderCheck.post("/login",LoginController)
+OrderCheck.post("/Verify-Otp",VerifyOtpController)
+
 
 ownerRouter.post("/Signup", ownerSignupController);
 ownerRouter.post("/login", ownerLoginController);
@@ -38,4 +44,7 @@ ownerRouter.post("/Verify",verifiedUser,(req,res)=>{
   })
 })
 
-module.exports = { ownerRouter };
+
+
+
+module.exports = { ownerRouter,OrderCheck };
