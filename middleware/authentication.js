@@ -15,7 +15,10 @@ exports.verifiedUser = async(req,res,next)=>{
             status:false
         })
     }
+   
      req.user = decode.id;
+     req.Email = decode.Email
+     console.log(req.Email)
    
 
     next()

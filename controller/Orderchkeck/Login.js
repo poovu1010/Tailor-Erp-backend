@@ -8,9 +8,9 @@ const jwt = require('jsonwebtoken')
 exports.LoginController = async (req, res, next) => {
 
     try {
-        
+
         const { email } = req.body
-    
+
         const IsEmailAleradyExists = await CustomerModel.findOne({ Gmail: email })
         console.log(IsEmailAleradyExists)
 
@@ -59,46 +59,91 @@ exports.VerifyOtpController = async (req, res, next) => {
 
     try {
         const { email, otp } = req.body;
-        
-        const IsEmailAleradyExists = await OrderCkeckOtpModel.findOne({Email:email})
 
-         if (!IsEmailAleradyExists) {
+        const IsEmailAleradyExists = await OrderCkeckOtpModel.findOne({ Email: email })
+
+        if (!IsEmailAleradyExists) {
             return res.status(404).json({
                 message: "Somthing went wrong",
                 status: false
             })
         }
 
-        const IsExpired  = Date.now()
+        const IsExpired = Date.now()
 
         // JwtCreation
         const token = jwt.sign({
-            Email:email,
-            Role:"User",
-            UserId:IsEmailAleradyExists._id},
+            Email: email,
+            Role: "User",
+            UserId: IsEmailAleradyExists._id
+        },
             process.env.JWT_SECRET_KEY)
 
         // CheckEmail
         if (IsEmailAleradyExists.OTP === Number(otp) && IsEmailAleradyExists.OTPExpiry > IsExpired) {
-         return res.status(200).cookie('jwt',token,{
-            maxAge: 1000*60*60*24*7
-         }).json({
-            message:"login Successfully",
-            status:true
-         })   
-        }else if (IsEmailAleradyExists.OTPExpiry < IsExpired){
+            return res.status(200).cookie('jwt', token, {
+                maxAge: 1000 * 60 * 60 * 24 * 7,
+                httpOnly: true,
+                secure: true,
+            
+            }).json({
+                message: "login Successfully",
+                status: true
+            })
+        } else if (IsEmailAleradyExists.OTPExpiry < IsExpired) {
             return res.status(400).json({
-            message:"Enter valid Otp",
-            status:false
-         })
-        }else{
-             return res.status(400).json({
-            message:"Enter valid Otp ",
-            status:false
-             })
+                message: "Enter valid Otp",
+                status: false
+            })
+        } else {
+            return res.status(400).json({
+                message: "Enter valid Otp ",
+                status: false
+            })
         }
     } catch (error) {
         next(error)
     }
+
+}
+
+exports.getCustomerOrder = async (req, res, next) => {
+    try {
+
+        const getOrderDetails = await CustomerModel.aggregate([{
+            $match: {
+                Gmail: req.Email
+            }
+        },
+        {
+            $lookup: {
+                from: "orders",
+                localField: "_id",
+                foreignField: "customerId",
+                as: "OrderHistory"
+            }
+
+        }
+        ])
+
+        res.status(200).json({
+            message: "up to dated",
+            status: true,
+            getOrderDetails
+        })
+
+
+    } catch (error) {
+
+        next(error)
+
+    }
+}
+
+exports.logout = async (req, res) => {
+    res.clearCookie("jwt").json({
+        status:true
+      
+    })
 
 }

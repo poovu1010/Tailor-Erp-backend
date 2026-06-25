@@ -9,13 +9,15 @@ const { verifiedUser } = require("../middleware/authentication");
 const { createCustomer, getAllCustomers, getSingleCustomer, updateCustomer, deleteCustomer } = require("../controller/CustomerController");
 const { verify } = require("jsonwebtoken");
 const { CreateOrder, GetAllorders, UpdateOrderStatus, GetSingleOrder } = require("../controller/OrderController");
-const { LoginController, VerifyOtpController } = require("../controller/Orderchkeck/Login");
+const { LoginController, VerifyOtpController, getCustomerOrder, logout } = require("../controller/Orderchkeck/Login");
 
 const ownerRouter = express.Router();
 const OrderCheck = express.Router();
 
 OrderCheck.post("/login",LoginController)
 OrderCheck.post("/Verify-Otp",VerifyOtpController)
+OrderCheck.get("/OrderInfo",verifiedUser,getCustomerOrder)
+OrderCheck.post("/logout",logout)
 
 
 ownerRouter.post("/Signup", ownerSignupController);
